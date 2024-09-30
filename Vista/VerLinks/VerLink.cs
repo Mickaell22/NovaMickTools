@@ -69,20 +69,16 @@ namespace Vista.VerLinks
 
             try
             {
-                // Abre una nueva ventana con el primer link y luego abre cada link en una nueva pestaña
-                bool firstLink = true;
-                foreach (string link in links)
-                {
-                    string args = firstLink ? $"{argsBase} {link}" : link;
-                    firstLink = false;
+                // Construir un solo argumento con todos los links
+                string allLinks = string.Join(" ", links);
 
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
-                    {
-                        FileName = browserPath,
-                        Arguments = args,
-                        UseShellExecute = true  // Asegura que el proceso se ejecute correctamente
-                    });
-                }
+                // Abrir el navegador con todos los links en una nueva ventana/incógnito
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = browserPath,
+                    Arguments = $"{argsBase} {allLinks}",
+                    UseShellExecute = true  // Asegura que el proceso se ejecute correctamente
+                });
             }
             catch (Exception ex)
             {
