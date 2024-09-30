@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GenerarWord.cs">
+    <Compile Include="GenerarWord\GenerarWord.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GenerarWord.Designer.cs">
+    <Compile Include="GenerarWord\GenerarWord.Designer.cs">
       <DependentUpon>GenerarWord.cs</DependentUpon>
     </Compile>
     <Compile Include="Principal.cs">
@@ -60,7 +60,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="GenerarWord.resx">
+    <Compile Include="VerLinks\VerLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VerLinks\VerLink.Designer.cs">
+      <DependentUpon>VerLink.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="GenerarWord\GenerarWord.resx">
       <DependentUpon>GenerarWord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Principal.resx">
@@ -76,7 +82,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="VerLinks\VerLink.resx">
+      <DependentUpon>VerLink.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="GenerarWord\asignaturas.txt - Acceso directo.lnk" />
+    <None Include="GenerarWord\BASE.docx" />
     <None Include="GenerarWord\docentes.txt - Acceso directo.lnk" />
     <None Include="GenerarWord\paralelos.txt - Acceso directo.lnk" />
     <None Include="Properties\Settings.settings">
@@ -92,8 +102,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\Control\Control.csproj">
+      <Project>{a8151fbe-221c-4e95-b7c7-21c04bea17b6}</Project>
+      <Name>Control</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GenerarWord\LogoDeCMF.jpg" />
     <Content Include="ImagenesGenerales\Logo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

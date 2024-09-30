@@ -85,15 +85,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtBoxParticipantes = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBGrupal = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.txtParalelo = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtDocente = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtTema = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbAsignatura = new System.Windows.Forms.ComboBox();
@@ -102,6 +102,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.txtRuta = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel4.SuspendLayout();
             this.panel8.SuspendLayout();
             this.panel33.SuspendLayout();
@@ -684,6 +685,7 @@
             this.label8.Size = new System.Drawing.Size(89, 20);
             this.label8.TabIndex = 13;
             this.label8.Text = "Asignatura";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // panel5
             // 
@@ -720,7 +722,7 @@
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.label7);
-            this.panel2.Controls.Add(this.textBox4);
+            this.panel2.Controls.Add(this.txtBoxParticipantes);
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(471, 28);
             this.panel2.Name = "panel2";
@@ -736,24 +738,24 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "Participantes";
             // 
-            // textBox4
+            // txtBoxParticipantes
             // 
-            this.textBox4.Location = new System.Drawing.Point(139, 26);
-            this.textBox4.Multiline = true;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(385, 148);
-            this.textBox4.TabIndex = 11;
+            this.txtBoxParticipantes.Location = new System.Drawing.Point(139, 26);
+            this.txtBoxParticipantes.Multiline = true;
+            this.txtBoxParticipantes.Name = "txtBoxParticipantes";
+            this.txtBoxParticipantes.Size = new System.Drawing.Size(385, 148);
+            this.txtBoxParticipantes.TabIndex = 11;
             // 
             // panel3
             // 
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel3.Controls.Add(this.checkBox1);
+            this.panel3.Controls.Add(this.checkBGrupal);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.txtParalelo);
             this.panel3.Controls.Add(this.label3);
             this.panel3.Controls.Add(this.txtDocente);
-            this.panel3.Controls.Add(this.textBox1);
+            this.panel3.Controls.Add(this.txtTema);
             this.panel3.Controls.Add(this.label2);
             this.panel3.Controls.Add(this.label1);
             this.panel3.Controls.Add(this.cmbAsignatura);
@@ -763,15 +765,16 @@
             this.panel3.Size = new System.Drawing.Size(457, 180);
             this.panel3.TabIndex = 3;
             // 
-            // checkBox1
+            // checkBGrupal
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(273, 152);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(46, 24);
-            this.checkBox1.TabIndex = 14;
-            this.checkBox1.Text = "Si";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBGrupal.AutoSize = true;
+            this.checkBGrupal.Location = new System.Drawing.Point(273, 152);
+            this.checkBGrupal.Name = "checkBGrupal";
+            this.checkBGrupal.Size = new System.Drawing.Size(46, 24);
+            this.checkBGrupal.TabIndex = 14;
+            this.checkBGrupal.Text = "Si";
+            this.checkBGrupal.UseVisualStyleBackColor = true;
+            this.checkBGrupal.CheckedChanged += new System.EventHandler(this.checkBGrupal_CheckedChanged);
             // 
             // label5
             // 
@@ -814,12 +817,12 @@
             this.txtDocente.Size = new System.Drawing.Size(310, 27);
             this.txtDocente.TabIndex = 11;
             // 
-            // textBox1
+            // txtTema
             // 
-            this.textBox1.Location = new System.Drawing.Point(133, 57);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(310, 27);
-            this.textBox1.TabIndex = 7;
+            this.txtTema.Location = new System.Drawing.Point(133, 57);
+            this.txtTema.Name = "txtTema";
+            this.txtTema.Size = new System.Drawing.Size(310, 27);
+            this.txtTema.TabIndex = 7;
             // 
             // label2
             // 
@@ -907,11 +910,25 @@
             this.txtRuta.TabIndex = 13;
             this.txtRuta.Text = "Ruta seleccionada";
             // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.AutoSize = true;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F);
+            this.button3.Location = new System.Drawing.Point(226, 584);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(172, 30);
+            this.button3.TabIndex = 14;
+            this.button3.Text = "Comprobar carpetas";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // GenerarWord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1712, 620);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.txtRuta);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.panel9);
@@ -992,15 +1009,15 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtBoxParticipantes;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBGrupal;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtDocente;
         private System.Windows.Forms.TextBox txtParalelo;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtTema;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbAsignatura;
@@ -1062,5 +1079,6 @@
         private System.Windows.Forms.TextBox txtBoxA_6;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label txtRuta;
+        private System.Windows.Forms.Button button3;
     }
 }

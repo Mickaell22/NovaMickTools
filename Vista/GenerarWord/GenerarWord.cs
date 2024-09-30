@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Control;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -27,7 +28,7 @@ namespace Vista
             this.Load += new EventHandler(GenerarWord_Load);
 
             // Vincular el evento CheckedChanged del checkbox
-            this.checkBox1.CheckedChanged += new EventHandler(checkBox1_CheckedChanged);
+            this.checkBGrupal.CheckedChanged += new EventHandler(checkBox1_CheckedChanged);
             informacionIzquierda();
             setInformacion();
         }
@@ -161,7 +162,7 @@ namespace Vista
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (checkBGrupal.Checked)
             {
                 panel2.Visible = true;
                 panel2.Location = new Point(panel3.Right + 10, panel3.Top); // Ajusta la posición del panel2 al lado derecho de panel3
@@ -183,7 +184,9 @@ namespace Vista
                 btnEditarGuardar.Text = "Editar informacion";
 
                 GuardarDatos();
-                MessageBox.Show("Informacion guardada");
+                cmbAsignatura.Items.Clear();
+                CargarComboxAsignatura();
+                MessageBox.Show("Informacion guardada","Guardado",MessageBoxButtons.OK,MessageBoxIcon.Asterisk);
                 HabilitarTodos(false);
             }
             else
@@ -191,7 +194,7 @@ namespace Vista
                 //Habilitamos la opcion de guardar informacion
 
                 btnEditarGuardar.Text = "Guardar cambios";
-                MessageBox.Show("Vas a editar la informacion");
+                MessageBox.Show("Vas a editar la informacion","Advertencia",MessageBoxButtons.OK,MessageBoxIcon.Warning);
                 HabilitarTodos(true);
             }
             //Guardar
@@ -254,7 +257,17 @@ namespace Vista
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Ctrl_GenerarWord ctrl_GenerarWord = new Ctrl_GenerarWord();
+            List<string> participantes = txtBoxParticipantes.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 
+            if (checkBGrupal.Checked)
+            {
+                ctrl_GenerarWord.GenerarWordGrupal(cmbAsignatura.SelectedItem.ToString(), txtTema.Text, DateTime.Now.ToString(), txtParalelo.Text, txtDocente.Text, ruta[0], participantes);
+            }
+            else
+            {
+                ctrl_GenerarWord.GenerarWord(cmbAsignatura.SelectedItem.ToString(), txtTema.Text, DateTime.Now.ToString(), txtParalelo.Text, txtDocente.Text, ruta[0]);
+            }
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -265,6 +278,7 @@ namespace Vista
                 {
                     baseFolderPath = folderDialog.SelectedPath;
                     ruta[0] = baseFolderPath;
+                    MessageBox.Show("Ruta seleccionada correctamente", "Seleccion exitosa", MessageBoxButtons.OK , MessageBoxIcon.Information);
                 }
                 File.WriteAllLines("rutaBase.txt", ruta) ;
                 CargarRuta();
@@ -275,5 +289,51 @@ namespace Vista
             txtRuta.Text = ruta[0];
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string basePath = ruta[0];  // Se asume que la ruta base está en ruta[0]
+            List<string> carpetasCreadas = new List<string>();
+            List<string> carpetasExistentes = new List<string>();
+
+            foreach (string asignatura in asignaturas)
+            {
+                // Construir la ruta completa para la carpeta de la asignatura
+                string carpetaAsignatura = Path.Combine(basePath, asignatura);
+
+                // Comprobar si la carpeta existe, si no, crearla
+                if (!Directory.Exists(carpetaAsignatura))
+                {
+                    Directory.CreateDirectory(carpetaAsignatura);
+                    carpetasCreadas.Add(carpetaAsignatura);
+                }
+                else
+                {
+                    carpetasExistentes.Add(carpetaAsignatura);
+                }
+            }
+
+            // Mostrar un único MessageBox con el resumen
+            string mensaje = "Resultado de la operación:\n\n";
+            if (carpetasCreadas.Count > 0)
+            {
+                mensaje += "Carpetas creadas:\n" + string.Join("\n", carpetasCreadas) + "\n\n";
+            }
+            if (carpetasExistentes.Count > 0)
+            {
+                mensaje += "Carpetas que ya existían:\n" + string.Join("\n", carpetasExistentes);
+            }
+
+            MessageBox.Show(mensaje, "Resumen de la operación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void checkBGrupal_CheckedChanged(object sender, EventArgs e)
+        {
+            txtBoxParticipantes.Text = "Moran Vera Mickaell";
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

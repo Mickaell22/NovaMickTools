@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Vista.VerLinks;
 
 namespace Vista
 {
@@ -86,6 +87,12 @@ namespace Vista
         private void button4_Click(object sender, EventArgs e)
         {
             abirPanelHijo(new GenerarWord());
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            
+            abirPanelHijo(new VerLink());
         }
     }
 }
