@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Vista.Factutras;
 using Vista.VerLinks;
 
 namespace Vista
@@ -93,6 +94,20 @@ namespace Vista
         {
             
             abirPanelHijo(new VerLink());
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormPedidosTemu formTemu = new FormPedidosTemu();
+            formTemu.WindowState = FormWindowState.Maximized;
+            formTemu.Show();
+
+            this.Hide();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

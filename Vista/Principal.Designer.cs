@@ -31,8 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelModulo3 = new System.Windows.Forms.Panel();
+            this.button6 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.panelModulo2 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.panelModulo1 = new System.Windows.Forms.Panel();
             this.button4 = new System.Windows.Forms.Button();
@@ -40,8 +42,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelHijo = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.panelModulo3.SuspendLayout();
             this.panelModulo2.SuspendLayout();
             this.panelModulo1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -52,6 +54,7 @@
             // 
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(217)))), ((int)(((byte)(50)))));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.panelModulo3);
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.panelModulo2);
@@ -64,17 +67,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1258, 100);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // panelModulo3
             // 
             this.panelModulo3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(217)))), ((int)(((byte)(55)))));
             this.panelModulo3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelModulo3.Controls.Add(this.button6);
             this.panelModulo3.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelModulo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelModulo3.Location = new System.Drawing.Point(792, 0);
             this.panelModulo3.Name = "panelModulo3";
-            this.panelModulo3.Size = new System.Drawing.Size(191, 100);
+            this.panelModulo3.Size = new System.Drawing.Size(191, 98);
             this.panelModulo3.TabIndex = 7;
+            // 
+            // button6
+            // 
+            this.button6.AutoSize = true;
+            this.button6.Location = new System.Drawing.Point(33, 21);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(121, 30);
+            this.button6.TabIndex = 2;
+            this.button6.Text = "Negocio";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button3
             // 
@@ -83,7 +99,7 @@
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.Location = new System.Drawing.Point(696, 0);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(96, 100);
+            this.button3.Size = new System.Drawing.Size(96, 98);
             this.button3.TabIndex = 6;
             this.button3.Text = "Modulo #3";
             this.button3.UseVisualStyleBackColor = true;
@@ -98,8 +114,19 @@
             this.panelModulo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelModulo2.Location = new System.Drawing.Point(505, 0);
             this.panelModulo2.Name = "panelModulo2";
-            this.panelModulo2.Size = new System.Drawing.Size(191, 100);
+            this.panelModulo2.Size = new System.Drawing.Size(191, 98);
             this.panelModulo2.TabIndex = 5;
+            // 
+            // button5
+            // 
+            this.button5.AutoSize = true;
+            this.button5.Location = new System.Drawing.Point(30, 21);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(121, 30);
+            this.button5.TabIndex = 1;
+            this.button5.Text = "Ver link";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button2
             // 
@@ -108,7 +135,7 @@
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(409, 0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(96, 100);
+            this.button2.Size = new System.Drawing.Size(96, 98);
             this.button2.TabIndex = 4;
             this.button2.Text = "Modulo #2";
             this.button2.UseVisualStyleBackColor = true;
@@ -123,13 +150,13 @@
             this.panelModulo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panelModulo1.Location = new System.Drawing.Point(218, 0);
             this.panelModulo1.Name = "panelModulo1";
-            this.panelModulo1.Size = new System.Drawing.Size(191, 100);
+            this.panelModulo1.Size = new System.Drawing.Size(191, 98);
             this.panelModulo1.TabIndex = 3;
             // 
             // button4
             // 
             this.button4.AutoSize = true;
-            this.button4.Location = new System.Drawing.Point(6, 21);
+            this.button4.Location = new System.Drawing.Point(29, 21);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(121, 30);
             this.button4.TabIndex = 0;
@@ -144,7 +171,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(117, 0);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 100);
+            this.button1.Size = new System.Drawing.Size(101, 98);
             this.button1.TabIndex = 2;
             this.button1.Text = "Modulo #1";
             this.button1.UseVisualStyleBackColor = true;
@@ -156,7 +183,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(117, 100);
+            this.panel2.Size = new System.Drawing.Size(117, 98);
             this.panel2.TabIndex = 0;
             // 
             // pictureBox1
@@ -165,7 +192,7 @@
             this.pictureBox1.Image = global::Vista.Properties.Resources.Logo;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(117, 100);
+            this.pictureBox1.Size = new System.Drawing.Size(117, 98);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -177,17 +204,6 @@
             this.panelHijo.Name = "panelHijo";
             this.panelHijo.Size = new System.Drawing.Size(1258, 438);
             this.panelHijo.TabIndex = 1;
-            // 
-            // button5
-            // 
-            this.button5.AutoSize = true;
-            this.button5.Location = new System.Drawing.Point(16, 21);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(121, 30);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "Ver link";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Principal
             // 
@@ -202,6 +218,8 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panelModulo3.ResumeLayout(false);
+            this.panelModulo3.PerformLayout();
             this.panelModulo2.ResumeLayout(false);
             this.panelModulo2.PerformLayout();
             this.panelModulo1.ResumeLayout(false);
@@ -226,6 +244,7 @@
         private System.Windows.Forms.Panel panelHijo;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }
 

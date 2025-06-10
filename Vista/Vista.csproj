@@ -46,6 +46,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factutras\FormAgregarArticulo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Factutras\FormAgregarArticulo.Designer.cs">
+      <DependentUpon>FormAgregarArticulo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Factutras\FormNuevoPedido.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Factutras\FormNuevoPedido.Designer.cs">
+      <DependentUpon>FormNuevoPedido.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Factutras\FormPedidosTemu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Factutras\FormPedidosTemu.Designer.cs">
+      <DependentUpon>FormPedidosTemu.cs</DependentUpon>
+    </Compile>
     <Compile Include="GenerarWord\GenerarWord.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,6 +84,15 @@
     <Compile Include="VerLinks\VerLink.Designer.cs">
       <DependentUpon>VerLink.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Factutras\FormAgregarArticulo.resx">
+      <DependentUpon>FormAgregarArticulo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Factutras\FormNuevoPedido.resx">
+      <DependentUpon>FormNuevoPedido.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Factutras\FormPedidosTemu.resx">
+      <DependentUpon>FormPedidosTemu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GenerarWord\GenerarWord.resx">
       <DependentUpon>GenerarWord.cs</DependentUpon>
     </EmbeddedResource>
@@ -107,10 +134,15 @@
       <Project>{a8151fbe-221c-4e95-b7c7-21c04bea17b6}</Project>
       <Name>Control</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Datos\Datos.csproj">
+      <Project>{c34b4db1-707c-41ee-a11b-28533980aeef}</Project>
+      <Name>Datos</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GenerarWord\LogoDeCMF.jpg" />
     <Content Include="ImagenesGenerales\Logo.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
