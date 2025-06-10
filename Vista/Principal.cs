@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vista.Factutras;
+using Vista.PythonTools;
 using Vista.VerLinks;
 
 namespace Vista
@@ -108,6 +109,16 @@ namespace Vista
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void btn_DescargarVideo_Click(object sender, EventArgs e)
+        {
+            abirPanelHijo(new FormDescargaVideos());
+        }
+
+        private void btn_convertidorPDF_Click(object sender, EventArgs e)
+        {
+            abirPanelHijo(new FormConvertidorPDF());
         }
     }
 }
