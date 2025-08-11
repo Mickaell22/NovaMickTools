@@ -14,6 +14,10 @@ namespace Vista.VerLinks
 {
     public partial class VerLink : Form
     {
+        private List<string> todosLosLinks = new List<string>();
+        private int indiceLinkActual = 0;
+        private const int LINKS_POR_LOTE = 10;
+        
         public VerLink()
         {
             InitializeComponent();
@@ -22,10 +26,30 @@ namespace Vista.VerLinks
         private void VerLinks_Load(object sender, EventArgs e)
         {
             // Vincular el evento CheckedChanged para asegurar que solo un checkbox esté seleccionado
-            checkBox1.CheckedChanged += OnlyOneCheckBox_CheckedChanged;
-            checkBox2.CheckedChanged += OnlyOneCheckBox_CheckedChanged;
             checkBox3.CheckedChanged += OnlyOneCheckBox_CheckedChanged;
             checkBox4.CheckedChanged += OnlyOneCheckBox_CheckedChanged;
+            
+            // Ocultar los checkboxes de Chrome (1 y 2)
+            checkBox1.Visible = false;
+            checkBox2.Visible = false;
+            
+            // Configurar textBox1 para múltiples líneas si no lo está ya
+            ConfigurarTextBox();
+        }
+        
+        private void ConfigurarTextBox()
+        {
+            // Configurar textBox1 como multilinea si no lo está
+            textBox1.Multiline = true;
+            textBox1.ScrollBars = ScrollBars.Vertical;
+            textBox1.AcceptsReturn = true;
+            textBox1.WordWrap = true;
+            
+            // Ajustar altura si es necesario
+            if (textBox1.Height < 100)
+            {
+                textBox1.Height = 120;
+            }
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -42,43 +66,115 @@ namespace Vista.VerLinks
             // Limpiar espacios en blanco alrededor de cada link
             links = links.Select(link => link.Trim()).Where(link => !string.IsNullOrEmpty(link)).ToArray();
 
-            // Determinar qué navegador está seleccionado
-            string browserPath = "";
-            string argsBase = "";
+            if (links.Length == 0)
+            {
+                MessageBox.Show("No hay links para abrir.");
+                return;
+            }
 
-            if (checkBox1.Checked)
+            // Guardar todos los links y resetear el índice
+            todosLosLinks = links.ToList();
+            indiceLinkActual = 0;
+
+            // Mostrar información sobre los lotes
+            int totalLotes = (int)Math.Ceiling((double)todosLosLinks.Count / LINKS_POR_LOTE);
+            MessageBox.Show($"Se encontraron {todosLosLinks.Count} links.\nSe abrirán en {totalLotes} lotes de {LINKS_POR_LOTE} links cada uno.\n\nPresiona 'Abrir Siguiente Lote' para continuar.", 
+                "Apertura por Lotes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Abrir el primer lote
+            AbrirSiguienteLote();
+        }
+
+        // Verifica que solo un checkbox esté seleccionado
+        private bool VerifySingleCheckboxSelected()
+        {
+            int count = 0;
+            if (checkBox3.Checked) count++;
+            if (checkBox4.Checked) count++;
+
+            return count == 1;
+        }
+
+        private void AbrirSiguienteLote()
+        {
+            if (indiceLinkActual >= todosLosLinks.Count)
             {
-                browserPath = @"C:\Users\ASUS\AppData\Local\Programs\Opera GX\launcher.exe";
-                argsBase = "--new-window"; // Opera nueva ventana
+                MessageBox.Show("Todos los links han sido abiertos.", "Completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            else if (checkBox2.Checked)
+
+            // Obtener el lote actual (máximo 10 links)
+            int linksRestantes = todosLosLinks.Count - indiceLinkActual;
+            int linksEnEsteLote = Math.Min(LINKS_POR_LOTE, linksRestantes);
+            
+            List<string> loteActual = todosLosLinks.GetRange(indiceLinkActual, linksEnEsteLote);
+            
+            // Determinar navegador y argumentos base (solo Brave)
+            string browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
+            string modoNavegador = "";
+            
+            if (checkBox3.Checked)
             {
-                browserPath = @"C:\Users\ASUS\AppData\Local\Programs\Opera GX\launcher.exe";
-                argsBase = "--private --new-window"; // Opera incognito y nueva ventana
-            }
-            else if (checkBox3.Checked)
-            {
-                browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
-                argsBase = "--new-window"; // Brave nueva ventana
+                modoNavegador = "normal";
             }
             else if (checkBox4.Checked)
             {
-                browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
-                argsBase = "--incognito --new-window"; // Brave incognito y nueva ventana
+                modoNavegador = "incognito";
             }
 
             try
             {
-                // Construir un solo argumento con todos los links
-                string allLinks = string.Join(" ", links);
+                // Construir argumentos para abrir todas las URLs en pestañas de una sola ventana
+                string argumentos = "";
+                
+                if (modoNavegador == "incognito")
+                {
+                    argumentos = "--incognito --new-window";
+                }
+                else
+                {
+                    argumentos = "--new-window";
+                }
+                
+                // Agregar todas las URLs del lote como argumentos separados
+                argumentos += " " + string.Join(" ", loteActual);
 
-                // Abrir el navegador con todos los links en una nueva ventana/incógnito
+                // Abrir el navegador con todas las URLs del lote en una sola ventana
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
                 {
                     FileName = browserPath,
-                    Arguments = $"{argsBase} {allLinks}",
-                    UseShellExecute = true  // Asegura que el proceso se ejecute correctamente
+                    Arguments = argumentos,
+                    UseShellExecute = true
                 });
+
+                // Actualizar el índice
+                indiceLinkActual += linksEnEsteLote;
+
+                // Mostrar información del progreso
+                int loteNumero = (indiceLinkActual / LINKS_POR_LOTE);
+                int totalLotes = (int)Math.Ceiling((double)todosLosLinks.Count / LINKS_POR_LOTE);
+                
+                if (indiceLinkActual < todosLosLinks.Count)
+                {
+                    int linksRestantesTotal = todosLosLinks.Count - indiceLinkActual;
+                    DialogResult resultado = MessageBox.Show(
+                        $"Lote {loteNumero} completado. Se abrieron {linksEnEsteLote} links en pestañas.\n\n" +
+                        $"Links restantes: {linksRestantesTotal}\n" +
+                        $"¿Deseas abrir el siguiente lote?",
+                        "Continuar con siguiente lote",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (resultado == DialogResult.Yes)
+                    {
+                        AbrirSiguienteLote();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"¡Completado! Se abrieron todos los {todosLosLinks.Count} links en {totalLotes} lotes con pestañas.", 
+                        "Finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -86,57 +182,32 @@ namespace Vista.VerLinks
             }
         }
 
-        // Verifica que solo un checkbox esté seleccionado
-        private bool VerifySingleCheckboxSelected()
-        {
-            int count = 0;
-            if (checkBox1.Checked) count++;
-            if (checkBox2.Checked) count++;
-            if (checkBox3.Checked) count++;
-            if (checkBox4.Checked) count++;
-
-            return count == 1;
-        }
-        // Método para abrir los links en el navegador adecuado
+        // Método para abrir los links en el navegador adecuado (solo Brave)
         private void OpenLinkInBrowser(string link)
         {
-            string browserPath = string.Empty;
+            string browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
             string arguments = string.Empty;
 
-            // Verificar qué checkbox está seleccionado y definir el navegador y los argumentos
-            if (checkBox1.Checked)
-            {
-                // Opera normal
-                browserPath = @"C:\Program Files\Opera\launcher.exe";
-                arguments = link;
-            }
-            else if (checkBox2.Checked)
-            {
-                // Opera en modo incognito
-                browserPath = @"C:\Program Files\Opera\launcher.exe";
-                arguments = $"--private {link}";
-            }
-            else if (checkBox3.Checked)
+            // Verificar qué checkbox está seleccionado y definir los argumentos
+            if (checkBox3.Checked)
             {
                 // Brave normal
-                browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
                 arguments = link;
             }
             else if (checkBox4.Checked)
             {
                 // Brave en modo incognito
-                browserPath = @"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe";
                 arguments = $"--incognito {link}";
             }
 
             // Ejecutar el navegador con el link
-            if (!string.IsNullOrEmpty(browserPath))
+            if (!string.IsNullOrEmpty(arguments))
             {
                 Process.Start(browserPath, arguments);
             }
             else
             {
-                MessageBox.Show("Navegador no encontrado.");
+                MessageBox.Show("Por favor, selecciona un modo de Brave.");
             }
         }
         // Función para desmarcar otros checkboxes cuando uno es seleccionado
@@ -160,27 +231,8 @@ namespace Vista.VerLinks
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            // Guardar el cursor actual
-            int selectionStart = textBox1.SelectionStart;
-
-            // Obtener todas las líneas del TextBox
-            string[] lines = textBox1.Lines;
-
-            // Asegurarse de que cada línea termine con un espacio
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (!lines[i].EndsWith(" "))
-                {
-                    lines[i] += " "; // Añadir un espacio al final de la línea si no lo tiene
-                }
-            }
-
-            // Asignar las líneas de nuevo al TextBox
-            textBox1.Lines = lines;
-
-            // Restaurar la posición del cursor
-            textBox1.SelectionStart = selectionStart;
-            textBox1.SelectionLength = 0; // Desmarcar cualquier selección
+            // Funcionalidad simplificada para Ctrl+V automático
+            // Ya no agregamos espacios automáticamente para evitar interferencias
         }
     }
 }

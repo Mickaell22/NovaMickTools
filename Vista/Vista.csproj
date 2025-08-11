@@ -84,9 +84,7 @@
     <Compile Include="PythonTools\FormConvertidorPDF.Designer.cs">
       <DependentUpon>FormConvertidorPDF.cs</DependentUpon>
     </Compile>
-    <Compile Include="PythonTools\FormDescargaVideos.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="PythonTools\FormDescargaVideos.cs" />
     <Compile Include="PythonTools\FormDescargaVideos.Designer.cs">
       <DependentUpon>FormDescargaVideos.cs</DependentUpon>
     </Compile>

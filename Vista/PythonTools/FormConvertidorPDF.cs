@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -29,6 +30,111 @@ namespace Vista.PythonTools
             }
 
             // Configurar filtros del OpenFileDialog
+            ActualizarFiltroArchivos();
+            
+            // Habilitar drag & drop
+            ConfigurarDragDrop();
+        }
+
+        private void ConfigurarDragDrop()
+        {
+            // Habilitar drag & drop en el formulario
+            this.AllowDrop = true;
+            this.DragEnter += FormConvertidorPDF_DragEnter;
+            this.DragDrop += FormConvertidorPDF_DragDrop;
+            
+            // También habilitar en el TextBox del archivo origen
+            txtArchivoOrigen.AllowDrop = true;
+            txtArchivoOrigen.DragEnter += FormConvertidorPDF_DragEnter;
+            txtArchivoOrigen.DragDrop += FormConvertidorPDF_DragDrop;
+        }
+
+        private void FormConvertidorPDF_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] archivos = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (archivos.Length == 1 && EsArchivoValido(archivos[0]))
+                {
+                    e.Effect = DragDropEffects.Copy;
+                }
+                else
+                {
+                    e.Effect = DragDropEffects.None;
+                }
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void FormConvertidorPDF_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] archivos = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (archivos.Length == 1 && EsArchivoValido(archivos[0]))
+                {
+                    string archivo = archivos[0];
+                    txtArchivoOrigen.Text = archivo;
+                    txtArchivoOrigen.ForeColor = Color.Black;
+                    
+                    // Auto-detectar tipo de conversión basado en la extensión
+                    DetectarTipoConversion(archivo);
+                    
+                    // Auto-configurar carpeta destino si está vacía
+                    if (txtCarpetaDestino.Text == "Selecciona carpeta de destino..." ||
+                        txtCarpetaDestino.ForeColor == Color.Gray)
+                    {
+                        string directorioArchivo = Path.GetDirectoryName(archivo);
+                        txtCarpetaDestino.Text = directorioArchivo;
+                        txtCarpetaDestino.ForeColor = Color.Black;
+                    }
+                    
+                    AgregarLog($"Archivo arrastrado: {Path.GetFileName(archivo)}");
+                }
+            }
+        }
+
+        private bool EsArchivoValido(string archivo)
+        {
+            if (!File.Exists(archivo))
+                return false;
+                
+            string extension = Path.GetExtension(archivo).ToLower();
+            string[] extensionesValidas = { ".docx", ".doc", ".xlsx", ".xls", ".pdf", ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff" };
+            
+            return extensionesValidas.Contains(extension);
+        }
+
+        private void DetectarTipoConversion(string archivo)
+        {
+            string extension = Path.GetExtension(archivo).ToLower();
+            
+            switch (extension)
+            {
+                case ".docx":
+                case ".doc":
+                    rbWordaPDF.Checked = true;
+                    break;
+                case ".xlsx":
+                case ".xls":
+                    rbExcelaPDF.Checked = true;
+                    break;
+                case ".jpg":
+                case ".jpeg":
+                case ".png":
+                case ".bmp":
+                case ".gif":
+                case ".tiff":
+                    rbImagenaPDF.Checked = true;
+                    break;
+                case ".pdf":
+                    rbPDFaWord.Checked = true;
+                    break;
+            }
+            
             ActualizarFiltroArchivos();
         }
 
@@ -169,13 +275,16 @@ namespace Vista.PythonTools
 
         private async Task IniciarConversion()
         {
-            string pythonScript = Path.Combine(Application.StartupPath, "PythonScripts", "convertir_pdf.py");
+            // Buscar el script en la raíz del proyecto (retroceder desde bin/Debug)
+            string baseDir = Application.StartupPath;
+            string pythonScript = Path.Combine(baseDir, "..", "..", "..", "convertir_pdf.py");
+            pythonScript = Path.GetFullPath(pythonScript); // Normalizar la ruta
 
             // Verificar si existe el script de Python
             if (!File.Exists(pythonScript))
             {
-                MessageBox.Show($"Script de Python no encontrado: {pythonScript}\n\n" +
-                    "Por favor, asegúrate de que el archivo convertir_pdf.py esté en la carpeta PythonScripts.",
+                MessageBox.Show($"Script de Python no encontrado en:\n{pythonScript}\n\n" +
+                    "Por favor, asegúrate de que el archivo convertir_pdf.py esté en la raíz del proyecto.",
                     "Script no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
